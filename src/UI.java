@@ -326,6 +326,7 @@ public class UI extends JFrame{
     private void processTextArea()
     {
         stateBar.setText("已修改");
+        //偷藏
     }
     public static void main(String[] args) {
         new UI();
