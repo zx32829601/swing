@@ -87,7 +87,7 @@ public class UI extends JFrame{
                 paste();
             }
         });
-        //關於
+        //關於....
         menuAbout.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
