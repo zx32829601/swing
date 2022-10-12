@@ -1,10 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 
 public class UI extends JFrame{
     private JMenuItem menuOpen;
@@ -21,6 +18,8 @@ public class UI extends JFrame{
 
     private JPopupMenu popUpMenu;
     private JLabel stateBar;
+    private JFileChooser fileChooser=new JFileChooser();
+
 
     public UI(){
         super("文字編輯器");
@@ -240,7 +239,6 @@ public class UI extends JFrame{
         }
     }
     private void open() {
-        JFileChooser fileChooser=new JFileChooser();
         int option=fileChooser.showDialog(null,null);
         if(option==JFileChooser.APPROVE_OPTION){
             try{
@@ -269,13 +267,67 @@ public class UI extends JFrame{
             return true;
     }
     }
-    private void saveFile() {}
-    private void saveFileAs() {}
-    private void closeFile() {}
-    private void cut() {}
-    private void copy() {}
-    private void paste() {}
-    private void processTextArea() {}
+    private void saveFile() {
+        File file=new File(getTitle());
+        if(isCurrentFileSaved()){
+            saveFileAs();
+        }else{
+            try{
+                BufferedWriter buf=new BufferedWriter(new FileWriter(file));
+                buf.write(textArea.getText());
+                buf.close();
+                stateBar.setText("未修改");
+            }catch (IOException e){
+                JOptionPane.showMessageDialog(null,e.toString(),"寫入檔案失敗!",JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+    private void saveFileAs() {
+        int option=fileChooser.showDialog(null,null);
+        if(option==JFileChooser.APPROVE_OPTION){
+            File file=fileChooser.getSelectedFile();
+            setTitle(file.toString());
+            try{
+                file.createNewFile();
+                saveFile();
+            }catch (IOException e){
+                JOptionPane.showMessageDialog(null,e.toString(),"無法建立新檔",JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+    private void closeFile() {
+        if(isCurrentFileSaved()){
+            dispose();
+        }else {
+            int option=JOptionPane.showConfirmDialog(null,"檔案已開啟，是否儲存?","儲存檔案?",JOptionPane.YES_NO_OPTION);
+            switch (option){
+                case JOptionPane.YES_OPTION :
+                    saveFile();
+                    break;
+                    case JOptionPane.NO_OPTION:
+                        dispose();
+
+            }
+        }
+    }
+    private void cut() {
+        textArea.cut();
+        stateBar.setText("已修改");
+        popUpMenu.setVisible(false);
+    }
+    private void copy() {
+        textArea.copy();
+        popUpMenu.setVisible(false);
+    }
+    private void paste() {
+        textArea.paste();
+        popUpMenu.setVisible(false);
+    }
+    private void processTextArea()
+    {
+        stateBar.setText("已修改");
+        //偷藏測試
+    }
     public static void main(String[] args) {
         new UI();
     }
