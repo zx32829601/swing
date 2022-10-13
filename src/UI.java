@@ -20,9 +20,9 @@ public class UI extends JFrame{
     private JLabel stateBar;
     private JFileChooser fileChooser=new JFileChooser();
 
-
     public UI(){
         super("文字編輯器");
+        this.setIconImage(new ImageIcon("./src/nick.jpg").getImage());
         setUpUIComponent();
         setUpEventListener();
         setVisible(true);
@@ -86,7 +86,7 @@ public class UI extends JFrame{
                 paste();
             }
         });
-        //關於
+        //關於....
         menuAbout.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
